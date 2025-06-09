@@ -110,7 +110,8 @@ def signup_for_activity(activity_name: str, email: str):
         raise HTTPException(status_code=400, detail="Maximum participants reached")
     
     # Validate email format
-    if "@" not in email or "." not in email.split("@")[-1]:
+    email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if not re.match(email_regex, email):
         raise HTTPException(status_code=400, detail="Invalid email format")
 
     # Add student
