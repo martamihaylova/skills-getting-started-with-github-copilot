@@ -4,14 +4,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  // Store last loaded activities for re-rendering
+  let lastActivities = {};
+
+  // Helper to get current email from form
+  function getCurrentEmail() {
+    return document.getElementById("email").value.trim().toLowerCase();
+  }
+
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
       const response = await fetch("/activities");
       const activities = await response.json();
+      lastActivities = activities;
 
-      // Clear loading message
+      // Clear loading message and dropdown
       activitiesList.innerHTML = "";
+      activitySelect.innerHTML = '<option value="">-- Select an activity --</option>';
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
@@ -42,6 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
           details.participants.forEach((email) => {
             const li = document.createElement("li");
             li.textContent = email;
+
+            // Add unregister button if this is the current user's email
+            if (getCurrentEmail() && getCurrentEmail() === email.toLowerCase()) {
+              const btn = document.createElement("button");
+              btn.textContent = "Unregister";
+              btn.className = "unregister-btn";
+              btn.onclick = async () => {
+                await unregisterFromActivity(name, email);
+              };
+              li.appendChild(btn);
+            }
+
             participantsList.appendChild(li);
           });
         } else {
@@ -67,6 +89,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Unregister function
+  async function unregisterFromActivity(activity, email) {
+    try {
+      const response = await fetch(
+        `/activities/${encodeURIComponent(activity)}/unregister?email=${encodeURIComponent(email)}`,
+        {
+          method: "POST",
+        }
+      );
+      const result = await response.json();
+
+      if (response.ok) {
+        messageDiv.textContent = result.message;
+        messageDiv.className = "success";
+        signupForm.reset();
+        await fetchActivities();
+      } else {
+        messageDiv.textContent = result.detail || "An error occurred";
+        messageDiv.className = "error";
+      }
+      messageDiv.classList.remove("hidden");
+      setTimeout(() => {
+        messageDiv.classList.add("hidden");
+      }, 5000);
+    } catch (error) {
+      messageDiv.textContent = "Failed to unregister. Please try again.";
+      messageDiv.className = "error";
+      messageDiv.classList.remove("hidden");
+      console.error("Error unregistering:", error);
+    }
+  }
+
+  // Re-render activities when email changes, so unregister buttons appear/disappear
+  document.getElementById("email").addEventListener("input", fetchActivities);
+
   // Handle form submission
   signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -88,6 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
         signupForm.reset();
+        await fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";

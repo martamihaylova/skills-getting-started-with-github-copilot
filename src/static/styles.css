@@ -171,3 +171,19 @@ footer {
   line-height: 1.4;
   word-break: break-all;
 }
+
+.unregister-btn {
+  margin-left: 10px;
+  background-color: #c62828;
+  color: #fff;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.unregister-btn:hover {
+  background-color: #b71c1c;
+}
