@@ -52,8 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const li = document.createElement("li");
             li.textContent = email;
 
+            // Cache the current user's email
+            const currentEmail = getCurrentEmail();
+
             // Add unregister button if this is the current user's email
-            if (getCurrentEmail() && getCurrentEmail() === email.toLowerCase()) {
+            if (currentEmail && currentEmail === email.toLowerCase()) {
               const btn = document.createElement("button");
               btn.textContent = "Unregister";
               btn.className = "unregister-btn";
