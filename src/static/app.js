@@ -4,8 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
-  // Store last loaded activities for re-rendering
-  let lastActivities = {};
+// (Removed lines 7 and 8)
 
   // Helper to get current email from form
   function getCurrentEmail() {
