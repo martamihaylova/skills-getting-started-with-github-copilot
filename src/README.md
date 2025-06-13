@@ -1,27 +1,48 @@
-<!--
-Mergington High School Activities API
+# Mergington High School Activities API
 
-This FastAPI application enables students to view and sign up for extracurricular activities at Mergington High School.
+A super simple FastAPI application that allows students to view and sign up for extracurricular activities.
 
-Features:
+## Features
+
 - View all available extracurricular activities
 - Sign up for activities
 
-Getting Started:
-1. Install dependencies: `pip install fastapi uvicorn`
-2. Run the application: `python app.py`
-3. Access API docs at http://localhost:8000/docs or http://localhost:8000/redoc
+## Getting Started
 
-API Endpoints:
-- GET `/activities`: Retrieve all activities with details and participant counts
-- POST `/activities/{activity_name}/signup?email=student@mergington.edu`: Sign up for an activity
+1. Install the dependencies:
 
-Data Model:
-- Activities: Identified by name, includes description, schedule, max participants, and signed-up student emails
-- Students: Identified by email, includes name and grade level
+   ```
+   pip install fastapi uvicorn
+   ```
 
-Note: All data is stored in memory and resets on server restart.
--->
+2. Run the application:
+
+   ```
+   python app.py
+   ```
+
+3. Open your browser and go to:
+   - API documentation: http://localhost:8000/docs
+   - Alternative documentation: http://localhost:8000/redoc
+
+## API Endpoints
+
+| Method | Endpoint                                                          | Description                                                         |
+| ------ | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
+| GET    | `/activities`                                                     | Get all activities with their details and current participant count |
+| POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up for an activity                                             |
+
+## Data Model
+
+The application uses a simple data model with meaningful identifiers:
+
+1. **Activities** - Uses activity name as identifier:
+
+   - Description
+   - Schedule
+   - Maximum number of participants allowed
+   - List of student emails who are signed up
+
 2. **Students** - Uses email as identifier:
    - Name
    - Grade level
