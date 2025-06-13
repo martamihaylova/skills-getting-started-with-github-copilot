@@ -1,3 +1,21 @@
+/**
+ * Handles the main logic for the activities signup app.
+ * 
+ * - Fetches and displays available activities and their details.
+ * - Allows users to sign up for activities and unregister if already signed up.
+ * - Dynamically updates the UI based on the current user's email input.
+ * - Handles form submission and displays success/error messages.
+ * 
+ * Key Functions:
+ * - fetchActivities: Fetches activities from the API and updates the UI.
+ * - unregisterFromActivity: Unregisters the user from a selected activity.
+ * - getCurrentEmail: Retrieves the current email from the form input.
+ * 
+ * Event Listeners:
+ * - On DOMContentLoaded: Initializes the app and fetches activities.
+ * - On email input change: Re-renders activities to update unregister buttons.
+ * - On form submission: Handles user signup for an activity.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
   const activitySelect = document.getElementById("activity");
