@@ -37,16 +37,20 @@ def test_signup_for_activity_already_signed_up():
 
 def test_signup_for_activity_max_participants():
     activity = "Math Olympiad"
-    # Fill up participants
-    activities[activity]["participants"] = [
-        f"student{i}@mergington.edu" for i in range(activities[activity]["max_participants"])
-    ]
-    email = "overflow@mergington.edu"
-    response = client.post(f"/activities/{activity}/signup", params={"email": email})
-    assert response.status_code == 400
-    assert response.json()["detail"] == "Maximum participants reached"
-    # Clean up
-    activities[activity]["participants"] = activities[activity]["participants"][:2]
+    # Save the original participants list
+    original_participants = activities[activity]["participants"][:]
+    try:
+        # Fill up participants
+        activities[activity]["participants"] = [
+            f"student{i}@mergington.edu" for i in range(activities[activity]["max_participants"])
+        ]
+        email = "overflow@mergington.edu"
+        response = client.post(f"/activities/{activity}/signup", params={"email": email})
+        assert response.status_code == 400
+        assert response.json()["detail"] == "Maximum participants reached"
+    finally:
+        # Restore the original participants list
+        activities[activity]["participants"] = original_participants
 
 def test_signup_for_activity_invalid_email():
     activity = "Chess Club"
